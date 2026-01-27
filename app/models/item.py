@@ -16,7 +16,11 @@ class Item(db.Model):
     location = db.Column(db.String(255), nullable=False)
     date_reported = db.Column(db.Date, nullable=False)
 
+    contact = db.Column(db.String(20), nullable=False)
+
     image = db.Column(db.String(255))  # filename
     status = db.Column(db.String(20), default="active")
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+user = db.relationship("User", backref="items")

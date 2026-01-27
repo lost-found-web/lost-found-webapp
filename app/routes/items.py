@@ -44,6 +44,7 @@ def report_item(item_type):
             category=request.form["category"],
             description=request.form["description"],
             location=request.form["location"],
+            contact=request.form["contact"],
             date_reported=datetime.strptime(
                 request.form["date_reported"], "%Y-%m-%d"
             ).date(),
@@ -56,3 +57,7 @@ def report_item(item_type):
         return redirect(url_for("items.home"))
 
     return render_template("report_item.html", item_type=item_type)
+@items_bp.route("/item/<int:item_id>")
+def item_details(item_id):
+    item = Item.query.get_or_404(item_id)
+    return render_template("item_details.html", item=item)
