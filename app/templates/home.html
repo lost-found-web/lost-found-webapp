@@ -27,21 +27,41 @@
 </section>
 
 <!-- FEATURED ITEMS -->
+<!-- FEATURED ITEMS -->
 <section class="container my-5">
-    <h3 class="text-center mb-4">Featured Lost & Found Items</h3>
+    <h3 class="text-center mb-4">Recent Lost & Found Items</h3>
 
+    {% if items %}
     <div class="row g-4">
-        {% for i in range(4) %}
+        {% for item in items %}
         <div class="col-md-3">
             <div class="card item-card h-100">
-                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Item">
+                {% if item.image %}
+<img src="{{ url_for('static', filename='uploads/' ~ item.image) }}"
+     class="card-img-top"
+     alt="Item Image">
+{% else %}
+<img src="https://via.placeholder.com/300x200"
+     class="card-img-top"
+     alt="No Image">
+{% endif %}
+
+
                 <div class="card-body">
-                    <span class="badge bg-primary mb-2">Lost</span>
-                    <h5 class="card-title">Sample Item</h5>
+                    {% if item.item_type == "lost" %}
+                        <span class="badge bg-danger mb-2">Lost</span>
+                    {% else %}
+                        <span class="badge bg-success mb-2">Found</span>
+                    {% endif %}
+
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+
                     <p class="card-text text-muted small">
-                        Location: Library <br>
-                        Date: 25 Jan 2026
+                        <strong>Category:</strong> {{ item.category }} <br>
+                        <strong>Location:</strong> {{ item.location }} <br>
+                        <strong>Date:</strong> {{ item.date_reported.strftime('%d %b %Y') }}
                     </p>
+
                     <a href="#" class="btn btn-outline-primary btn-sm w-100">
                         View Details
                     </a>
@@ -50,6 +70,10 @@
         </div>
         {% endfor %}
     </div>
+    {% else %}
+        <p class="text-center text-muted">No items reported yet.</p>
+    {% endif %}
 </section>
+
 
 {% endblock %}

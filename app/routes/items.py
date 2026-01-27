@@ -1,12 +1,16 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, current_app
 from flask_login import login_required, current_user
-
 from datetime import datetime
+from werkzeug.utils import secure_filename
+import os
 
 from app.extensions import db
 from app.models.item import Item
 
+from flask import current_app
+
 items_bp = Blueprint('items', __name__)
+
 
 @items_bp.route("/")
 def home():
@@ -20,6 +24,19 @@ def report_item(item_type):
         return redirect(url_for("items.home"))
 
     if request.method == "POST":
+        # ---------- IMAGE HANDLING ----------
+        image_file = request.files.get("image")
+        filename = None
+
+        if image_file and image_file.filename != "":
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(
+                current_app.config["UPLOAD_FOLDER"],
+                filename
+            )
+            image_file.save(image_path)
+
+        # ---------- SAVE ITEM ----------
         new_item = Item(
             user_id=current_user.id,
             item_type=item_type,
@@ -28,9 +45,9 @@ def report_item(item_type):
             description=request.form["description"],
             location=request.form["location"],
             date_reported=datetime.strptime(
-    request.form["date_reported"], "%Y-%m-%d"
-).date()
-
+                request.form["date_reported"], "%Y-%m-%d"
+            ).date(),
+            image=filename
         )
 
         db.session.add(new_item)

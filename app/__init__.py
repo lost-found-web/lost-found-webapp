@@ -5,6 +5,11 @@ from app.models.user import User
 def create_app():
     app = Flask(__name__)
 
+    import os
+
+    app.config['UPLOAD_FOLDER'] = os.path.join('app', 'static', 'uploads')
+
+
     # Config
     app.config['SECRET_KEY'] = 'dev-secret-key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lostfound.db'
