@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Report Item{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="card shadow-sm p-4">
+    <h4 class="mb-3">Report {{ item_type|capitalize }} Item</h4>
+
+    <form method="POST" enctype="multipart/form-data">
+      <input class="form-control mb-2" name="item_name" placeholder="Item Name" required>
+
+      <select class="form-control mb-2" name="category" required>
+        <option value="">Select Category</option>
+        <option>Mobile</option>
+        <option>Wallet</option>
+        <option>Documents</option>
+        <option>Keys</option>
+        <option>Others</option>
+      </select>
+
+      <textarea class="form-control mb-2" name="description" placeholder="Description" required></textarea>
+
+      <input class="form-control mb-2" name="location" placeholder="Location" required>
+
+      <input class="form-control mb-2" type="date" name="date_reported" required>
+
+      <input class="form-control mb-3" type="file" name="image">
+
+      <button class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -34,10 +34,10 @@
 
     {% if current_user.is_authenticated %}
     <li class="nav-item">
-        <a class="nav-link" href="#">Report Lost</a>
+        <a class="nav-link" href="{{ url_for('items.report_item', item_type='lost') }}">Report Lost</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">Report Found</a>
+        <a class="nav-link" href="{{ url_for('items.report_item', item_type='found') }}">Report Found</a>
     </li>
     {% endif %}
 

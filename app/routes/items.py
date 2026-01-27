@@ -1,8 +1,41 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, redirect, url_for
+from flask_login import login_required, current_user
+
+from datetime import datetime
+
+from app.extensions import db
+from app.models.item import Item
 
 items_bp = Blueprint('items', __name__)
 
 @items_bp.route("/")
 def home():
-    return render_template("home.html")
+    items = Item.query.order_by(Item.created_at.desc()).all()
+    return render_template("home.html", items=items)
 
+@items_bp.route("/report/<item_type>", methods=["GET", "POST"])
+@login_required
+def report_item(item_type):
+    if item_type not in ["lost", "found"]:
+        return redirect(url_for("items.home"))
+
+    if request.method == "POST":
+        new_item = Item(
+            user_id=current_user.id,
+            item_type=item_type,
+            item_name=request.form["item_name"],
+            category=request.form["category"],
+            description=request.form["description"],
+            location=request.form["location"],
+            date_reported=datetime.strptime(
+    request.form["date_reported"], "%Y-%m-%d"
+).date()
+
+        )
+
+        db.session.add(new_item)
+        db.session.commit()
+
+        return redirect(url_for("items.home"))
+
+    return render_template("report_item.html", item_type=item_type)
