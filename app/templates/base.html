@@ -28,24 +28,39 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Report Lost</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Report Found</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Search</a>
-                </li>
-            </ul>
+    <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+    </li>
 
-            <div class="d-flex">
-                <a href="#" class="btn btn-outline-primary me-2">Login</a>
-                <a href="#" class="btn btn-primary">Register</a>
-            </div>
+    {% if current_user.is_authenticated %}
+    <li class="nav-item">
+        <a class="nav-link" href="#">Report Lost</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Report Found</a>
+    </li>
+    {% endif %}
+
+    <li class="nav-item">
+        <a class="nav-link" href="#">Search</a>
+    </li>
+</ul>
+
+
+            <div class="d-flex align-items-center">
+    {% if current_user.is_authenticated %}
+        <span class="me-3 text-muted small">
+            Hi, {{ current_user.username }}
+        </span>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">
+            Logout
+        </a>
+    {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary me-2">Login</a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Register</a>
+    {% endif %}
+</div>
+
         </div>
     </div>
 </nav>

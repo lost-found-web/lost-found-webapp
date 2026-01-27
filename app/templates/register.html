@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
+  <div class="card p-4 shadow-sm" style="width:100%; max-width:450px;">
+    <h4 class="text-center mb-3">Create Account</h4>
+
+    <form method="POST">
+      <input class="form-control mb-2" name="full_name" placeholder="Full Name" required>
+      <input class="form-control mb-2" name="username" placeholder="Username" required>
+      <input class="form-control mb-2" name="email" type="email" placeholder="Email" required>
+      <input class="form-control mb-2" name="contact" placeholder="Contact Number">
+      <input class="form-control mb-3" name="password" type="password" placeholder="Password" required>
+
+      <button class="btn btn-primary w-100">Register</button>
+    </form>
+
+    <p class="text-center mt-3 small">
+      Already have an account?
+      <a href="{{ url_for('auth.login') }}">Login</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
