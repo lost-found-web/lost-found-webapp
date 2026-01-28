@@ -29,7 +29,8 @@ def register():
             email=email,
             full_name=full_name,
             contact_number=contact,
-            password=generate_password_hash(password)
+            password=generate_password_hash(password),
+            role="role"
         )
 
         db.session.add(new_user)
