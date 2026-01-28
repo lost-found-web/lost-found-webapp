@@ -41,5 +41,22 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-    # 🔴 THIS LINE MUST EXIST
+    from app.models.user import User
+    from werkzeug.security import generate_password_hash
+
+    def create_default_admin():
+        admin = User.query.filter_by(role="admin").first()
+        if not admin:
+            admin = User(
+                username="admin",
+                full_name="Admin",
+                email="admin@lostfound.com",
+                contact_number="9999999999",
+                password=generate_password_hash("admin123"),
+                role="admin",
+                is_blocked=False
+            )
+            db.session.add(admin)
+            db.session.commit()
+            
     return app
