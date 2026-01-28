@@ -50,7 +50,7 @@ def create_app():
             admin = User(
                 username="admin",
                 full_name="Admin",
-                email="admin@lostfound.com",
+                email="admin.lostfound@gmail.com",
                 contact_number="9999999999",
                 password=generate_password_hash("admin123"),
                 role="admin",
@@ -58,5 +58,5 @@ def create_app():
             )
             db.session.add(admin)
             db.session.commit()
-            
+
     return app
