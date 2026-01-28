@@ -8,16 +8,39 @@ from app.extensions import db
 from app.models.item import Item
 
 from flask import current_app
+from flask import request
+
 
 items_bp = Blueprint('items', __name__)
 
 
 @items_bp.route("/")
 def home():
-    items = Item.query.filter_by(status="active") \
-                  .order_by(Item.created_at.desc()).all()
+    search = request.args.get("search", "")
+    category = request.args.get("category", "")
+    location = request.args.get("location", "")
 
-    return render_template("home.html", items=items)
+    query = Item.query.filter_by(status="active")
+
+    if search:
+        query = query.filter(Item.item_name.ilike(f"%{search}%"))
+
+    if category:
+        query = query.filter_by(category=category)
+
+    if location:
+        query = query.filter(Item.location.ilike(f"%{location}%"))
+
+    items = query.order_by(Item.created_at.desc()).all()
+
+    return render_template(
+        "home.html",
+        items=items,
+        search=search,
+        category=category,
+        location=location
+    )
+
 
 @items_bp.route("/report/<item_type>", methods=["GET", "POST"])
 @login_required
