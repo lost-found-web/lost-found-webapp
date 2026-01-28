@@ -100,3 +100,17 @@ def mark_recovered(item_id):
     db.session.commit()
 
     return redirect(url_for("items.item_details", item_id=item.id))
+
+@items_bp.route("/item/<int:item_id>/delete", methods=["POST"])
+@login_required
+def delete_item(item_id):
+    item = Item.query.get_or_404(item_id)
+
+    # Only owner can delete
+    if item.user_id != current_user.id:
+        return redirect(url_for("items.home"))
+
+    db.session.delete(item)
+    db.session.commit()
+
+    return redirect(url_for("items.home"))
