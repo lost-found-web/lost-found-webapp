@@ -41,36 +41,49 @@
     </li>
     {% endif %}
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">Search</a>
-    </li>
 </ul>
 
-{% if current_user.is_authenticated and current_user.role == "admin" %}
-  <li class="nav-item">
-    <a class="nav-link text-danger fw-bold"
-       href="{{ url_for('admin.dashboard') }}">
-       Admin
-    </a>
-  </li>
-{% endif %}
+<ul class="navbar-nav ms-auto align-items-center">
 
+  {% if current_user.is_authenticated %}
+    
+    <!-- PROFILE -->
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('profile.profile') }}">
+        Profile
+      </a>
+    </li>
 
-
-
-            <div class="d-flex align-items-center">
-    {% if current_user.is_authenticated %}
-        <span class="me-3 text-muted small">
-            Hi, {{ current_user.username }}
-        </span>
-        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">
-            Logout
-        </a>
-    {% else %}
-        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary me-2">Login</a>
-        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Register</a>
+    <!-- ADMIN -->
+    {% if current_user.role == "admin" %}
+    <li class="nav-item">
+      <a class="nav-link text-danger fw-bold"
+         href="{{ url_for('admin.dashboard') }}">
+        Admin
+      </a>
+    </li>
     {% endif %}
-</div>
+
+    <!-- LOGOUT -->
+    <li class="nav-item ms-2">
+      <a class="btn btn-outline-danger btn-sm"
+         href="{{ url_for('auth.logout') }}">
+        Logout
+      </a>
+    </li>
+
+  {% else %}
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
+    </li>
+
+  {% endif %}
+
+</ul>
 
         </div>
     </div>

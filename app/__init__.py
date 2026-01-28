@@ -28,10 +28,14 @@ def create_app():
     from .routes.auth import auth_bp
     from .routes.items import items_bp
     from .routes.admin import admin_bp
+    from .routes.profile import profile_bp
+
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(items_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(profile_bp)
+
 
     # Create DB tables
     with app.app_context():

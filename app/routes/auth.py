@@ -63,5 +63,5 @@ def login():
 @auth_bp.route("/logout")
 def logout():
     logout_user()
-    flash("Logged out successfully", "success")
+    flash("Logged out successfully", "info")
     return redirect(url_for("items.home"))
