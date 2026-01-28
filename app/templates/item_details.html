@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Item Details{% endblock %}
 
+<p class="text-muted small">
+  DEBUG → status: {{ item.status }},
+  owner_id: {{ item.user_id }},
+  current_user: {{ current_user.id if current_user.is_authenticated else 'no-user' }}
+</p>
+
+
 {% block content %}
 <div class="container my-5">
   <div class="row">
@@ -56,4 +63,23 @@
 
   </div>
 </div>
+
+{% if current_user.is_authenticated and current_user.id == item.user_id %}
+  {% if item.status == "active" %}
+    <form method="POST"
+          action="{{ url_for('items.mark_recovered', item_id=item.id) }}">
+      <button class="btn btn-success mt-3">
+        Mark as Recovered
+      </button>
+    </form>
+  {% else %}
+    <span class="badge bg-success mt-3">Recovered</span>
+  {% endif %}
+{% endif %}
+
+
 {% endblock %}
+
+
+
+

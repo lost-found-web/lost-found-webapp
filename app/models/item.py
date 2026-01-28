@@ -19,7 +19,7 @@ class Item(db.Model):
     contact = db.Column(db.String(20), nullable=False)
 
     image = db.Column(db.String(255))  # filename
-    status = db.Column(db.String(20), default="active")
+    status = db.Column(db.String(20), default="active",nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 

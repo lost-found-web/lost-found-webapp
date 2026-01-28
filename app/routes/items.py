@@ -14,7 +14,9 @@ items_bp = Blueprint('items', __name__)
 
 @items_bp.route("/")
 def home():
-    items = Item.query.order_by(Item.created_at.desc()).all()
+    items = Item.query.filter_by(status="active") \
+                  .order_by(Item.created_at.desc()).all()
+
     return render_template("home.html", items=items)
 
 @items_bp.route("/report/<item_type>", methods=["GET", "POST"])
@@ -48,7 +50,8 @@ def report_item(item_type):
             date_reported=datetime.strptime(
                 request.form["date_reported"], "%Y-%m-%d"
             ).date(),
-            image=filename
+            image=filename,
+            status="active"
         )
 
         db.session.add(new_item)
@@ -61,3 +64,16 @@ def report_item(item_type):
 def item_details(item_id):
     item = Item.query.get_or_404(item_id)
     return render_template("item_details.html", item=item)
+@items_bp.route("/item/<int:item_id>/recover", methods=["POST"])
+@login_required
+def mark_recovered(item_id):
+    item = Item.query.get_or_404(item_id)
+
+    # Only owner can mark as recovered
+    if item.user_id != current_user.id:
+        return redirect(url_for("items.home"))
+
+    item.status = "recovered"
+    db.session.commit()
+
+    return redirect(url_for("items.item_details", item_id=item.id))
