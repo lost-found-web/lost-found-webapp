@@ -6,6 +6,65 @@
 
   <h2 class="mb-4">Admin Dashboard</h2>
 
+  <!-- STATISTICS -->
+<div class="row g-3 mb-4">
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Total Users</h6>
+        <h3>{{ total_users }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Total Items</h6>
+        <h3>{{ total_items }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Lost Items</h6>
+        <h3>{{ lost_items }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Found Items</h6>
+        <h3>{{ found_items }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Active Items</h6>
+        <h3>{{ active_items }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Recovered Items</h6>
+        <h3>{{ recovered_items }}</h3>
+      </div>
+    </div>
+  </div>
+
+</div>
+
   <!-- USERS -->
   <div class="card mb-4">
     <div class="card-header fw-bold">Users</div>
@@ -17,8 +76,11 @@
             <th>Username</th>
             <th>Email</th>
             <th>Role</th>
-          </tr>
+            <th>Status</th>
+            <th>Action</th>
+            </tr>
         </thead>
+
         <tbody>
           {% for user in users %}
           <tr>
@@ -26,6 +88,28 @@
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.role }}</td>
+            <td>
+  {% if user.is_blocked %}
+    <span class="badge bg-danger">Blocked</span>
+  {% else %}
+    <span class="badge bg-success">Active</span>
+  {% endif %}
+</td>
+
+<td>
+  {% if user.is_blocked %}
+    <a href="{{ url_for('admin.unblock_user', user_id=user.id) }}"
+       class="btn btn-sm btn-success">
+      Unblock
+    </a>
+  {% else %}
+    <a href="{{ url_for('admin.block_user', user_id=user.id) }}"
+       class="btn btn-sm btn-danger">
+      Block
+    </a>
+  {% endif %}
+</td>
+
           </tr>
           {% endfor %}
         </tbody>

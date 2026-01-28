@@ -30,7 +30,8 @@ def register():
             full_name=full_name,
             contact_number=contact,
             password=generate_password_hash(password),
-            role="role"
+            role="user",
+            is_blocked=False
         )
 
         db.session.add(new_user)
@@ -42,6 +43,7 @@ def register():
     return render_template("register.html")
 
 
+
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -49,6 +51,15 @@ def login():
         password = request.form["password"]
 
         user = User.query.filter_by(email=email).first()
+
+        if not user or not check_password_hash(user.password, password):
+           flash("Invalid credentials", "danger")
+           return redirect(url_for("auth.login"))
+
+        if user.is_blocked:
+           flash("Your account has been blocked by admin.", "danger")
+           return redirect(url_for("auth.login"))
+
 
         if user and check_password_hash(user.password, password):
             login_user(user)

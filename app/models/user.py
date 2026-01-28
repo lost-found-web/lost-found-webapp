@@ -11,7 +11,9 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(255), nullable=False)
 
     full_name = db.Column(db.String(100), nullable=False)
+    is_blocked = db.Column(db.Boolean, default=False)
     contact_number = db.Column(db.String(20))
     role = db.Column(db.String(20), default="user")  # user / admin
+    
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
