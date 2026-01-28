@@ -114,3 +114,38 @@ def delete_item(item_id):
     db.session.commit()
 
     return redirect(url_for("items.home"))
+
+@items_bp.route("/item/<int:item_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_item(item_id):
+    item = Item.query.get_or_404(item_id)
+
+    # Only owner can edit
+    if item.user_id != current_user.id:
+        return redirect(url_for("items.home"))
+
+    if request.method == "POST":
+        item.item_name = request.form["item_name"]
+        item.category = request.form["category"]
+        item.description = request.form["description"]
+        item.location = request.form["location"]
+        item.contact = request.form["contact"]
+        item.date_reported = datetime.strptime(
+            request.form["date_reported"], "%Y-%m-%d"
+        ).date()
+
+        # Optional image update
+        image_file = request.files.get("image")
+        if image_file and image_file.filename != "":
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(
+                current_app.config["UPLOAD_FOLDER"],
+                filename
+            )
+            image_file.save(image_path)
+            item.image = filename
+
+        db.session.commit()
+        return redirect(url_for("items.item_details", item_id=item.id))
+
+    return render_template("edit_item.html", item=item)
