@@ -176,3 +176,17 @@ def edit_item(item_id):
         return redirect(url_for("items.item_details", item_id=item.id))
 
     return render_template("edit_item.html", item=item)
+
+@items_bp.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@items_bp.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+
+@items_bp.route("/privacy-policy")
+def privacy_policy():
+    return render_template("privacy_policy.html")
