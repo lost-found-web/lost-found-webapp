@@ -2,6 +2,9 @@ from datetime import datetime
 from app.extensions import db
 
 class Item(db.Model):
+
+    
+
     __tablename__ = "items"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -23,4 +26,4 @@ class Item(db.Model):
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-user = db.relationship("User", backref="items")
+    user = db.relationship("User", backref="items",lazy=True)

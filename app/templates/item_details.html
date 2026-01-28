@@ -49,9 +49,31 @@
         <hr>
 
         {% if current_user.is_authenticated %}
+  <hr>
+
+<h5>Contact Details</h5>
+
+{% if current_user.is_authenticated %}
   <p>
-    <strong>Contact:</strong> {{ item.contact }}
+    <strong>Name:</strong> {{ item.user.full_name or item.user.username }}
   </p>
+
+  <p>
+    <strong>Email:</strong>
+    <a href="mailto:{{ item.user.email }}">
+      {{ item.user.email }}
+    </a>
+  </p>
+
+  <p>
+    <strong>Phone:</strong> {{ item.user.contact_number }}
+  </p>
+{% else %}
+  <p class="text-muted">
+    Login to view contact details.
+  </p>
+{% endif %}
+
 {% else %}
   <p class="text-muted">
     Login to view contact details.
