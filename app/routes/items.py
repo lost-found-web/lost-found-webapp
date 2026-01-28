@@ -41,6 +41,33 @@ def home():
         location=location
     )
 
+@items_bp.route("/lost-items")
+def lost_items():
+    items = Item.query.filter_by(
+        item_type="lost",
+        status="active"
+    ).order_by(Item.created_at.desc()).all()
+
+    return render_template(
+        "items_list.html",
+        items=items,
+        page_title="Lost Items"
+    )
+
+
+@items_bp.route("/found-items")
+def found_items():
+    items = Item.query.filter_by(
+        item_type="found",
+        status="active"
+    ).order_by(Item.created_at.desc()).all()
+
+    return render_template(
+        "items_list.html",
+        items=items,
+        page_title="Found Items"
+    )
+
 
 @items_bp.route("/report/<item_type>", methods=["GET", "POST"])
 @login_required

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+
+  <h3 class="text-center mb-4">{{ page_title }}</h3>
+
+  {% if items %}
+  <div class="row g-4">
+    {% for item in items %}
+    <div class="col-md-3">
+      <div class="card item-card h-100">
+
+        {% if item.image %}
+        <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}"
+             class="card-img-top"
+             alt="Item Image">
+        {% else %}
+        <img src="https://via.placeholder.com/300x200"
+             class="card-img-top"
+             alt="No Image">
+        {% endif %}
+
+        <div class="card-body">
+
+          {% if item.item_type == "lost" %}
+            <span class="badge bg-danger mb-2">Lost</span>
+          {% else %}
+            <span class="badge bg-success mb-2">Found</span>
+          {% endif %}
+
+          <h5 class="card-title">{{ item.item_name }}</h5>
+
+          <p class="card-text small text-muted">
+            <strong>Category:</strong> {{ item.category }} <br>
+            <strong>Location:</strong> {{ item.location }} <br>
+            <strong>Date:</strong> {{ item.date_reported.strftime('%d %b %Y') }}
+          </p>
+
+          <a href="{{ url_for('items.item_details', item_id=item.id) }}"
+             class="btn btn-outline-primary btn-sm w-100">
+            View Details
+          </a>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p class="text-center text-muted">No items available.</p>
+  {% endif %}
+
+</div>
+{% endblock %}
