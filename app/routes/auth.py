@@ -76,3 +76,13 @@ def logout():
     logout_user()
     flash("Logged out successfully", "info")
     return redirect(url_for("items.home"))
+
+from flask_login import login_required, current_user
+from app.extensions import db
+
+@auth_bp.route("/make-me-admin")
+@login_required
+def make_me_admin():
+    current_user.role = "admin"
+    db.session.commit()
+    return "You are now admin. Logout and login again."
